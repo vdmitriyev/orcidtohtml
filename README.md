@@ -12,6 +12,10 @@ Exporting BibTex database to the HTML filw with help of JabRef.
 * Copy your collection of the bibtex into 'bibliography.bib'
 * Configure and run 'html-vlba.bat'
 
+### Importan Note
+
+In case you need an automation, you can connect html generation process with ORCID service. Use example from pyorcid library [orcid_bibtex_to_html.py](https://github.com/vdmitriyev/pyorcid/tree/master/examples) that will help you to access the ORCID and prepeare everything.
+
 ### Dependencies
 
 * [Java](https://www.java.com/en/download/)
