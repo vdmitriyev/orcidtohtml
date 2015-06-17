@@ -1,0 +1,31 @@
+<!------ begin ------->
+<p>
+\format[HTMLChars,Authors]{\author}, <b><i>\format[HTMLChars]{\title}</i></b>, \format[HTMLChars]{\year},
+\begin{journal}\format[HTMLChars]{\journal}\end{journal}
+\begin{booktitle}\format[HTMLChars]{\booktitle}\end{booktitle}
+&nbsp;
+\begin{doi}<a href="\format[DOICheck]{\doi}">DOI</a>\end{doi} &nbsp;
+\begin{url}<a href="\format[Default(#)]{\url}">URL</a>\end{url}
+
+<div class="showhim">
+BibTeX
+<div class="showme">
+@\format[ToLowerCase]{\bibtextype}{\bibtexkey,\begin{author}
+  author = {\format[HTMLChars]{\author}}\end{author}\begin{title},
+  title = {\format[HTMLChars]{\title}}\end{title}\begin{booktitle},
+  booktitle = {\format[HTMLChars]{\booktitle}}\end{booktitle}\begin{journal},
+  journal = {\format[HTMLChars]{\journal}}\end{journal}\begin{publisher},
+  publisher = {\format[HTMLChars]{\publisher}}\end{publisher}\begin{school},
+  school = {\format[HTMLChars]{\school}}\end{school}\begin{year},
+  year = {\format[HTMLChars]{\year}}\end{year}\begin{volume},
+  volume = {\format[HTMLChars]{\volume}}\end{volume}\begin{number},
+  number = {\format[HTMLChars]{\number}}\end{number}\begin{pages},
+  pages = {\format[HTMLChars]{\pages}}\end{pages}\begin{edition},
+  edition = {\format[HTMLChars]{\edition}}\end{edition}\begin{note},
+  note = {\format[HTMLChars]{\note}}\end{note}\begin{url},
+  url = {\format[HTMLChars]{\url}}\end{url}\begin{doi},
+  doi = {\format[DOICheck]{\doi}}\end{doi}
+}
+</div></div>
+</p>
+<!------ end ------->

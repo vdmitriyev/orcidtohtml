@@ -1,0 +1,10 @@
+<!------ begin ------->
+<p>
+\format[HTMLChars,Authors]{\author}, <b><i>\format[HTMLChars]{\title}</i></b>, \format[HTMLChars]{\year},
+\begin{journal}\format[HTMLChars]{\journal}\end{journal}
+\begin{booktitle}\format[HTMLChars]{\booktitle}\end{booktitle}
+&nbsp;
+\begin{doi}<a href="\format[DOICheck]{\doi}">DOI</a>\end{doi} &nbsp;
+\begin{url}<a href="\format[Default(#)]{\url}">URL</a>\end{url}
+</p>
+<!------ end ------->
