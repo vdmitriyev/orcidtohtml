@@ -12,6 +12,11 @@ Exporting BibTex database to the HTML filw with help of JabRef.
 * Copy your collection of the bibtex into 'bibliography.bib'
 * Configure and run 'html-vlba.bat'
 
+### Dependencies
+
+* [Java](https://www.java.com/en/download/)
+* [JabRef](http://jabref.sourceforge.net/download.php)
+
 ### Materials
 
 * [JabRef - Command line options](http://jabref.sourceforge.net/help/CommandLine.php)
