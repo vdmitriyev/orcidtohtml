@@ -27,7 +27,7 @@ location /orcidtohtml/ {
 
 ### JabRef for BibTeX to HTML Export
 
-* Manual on exporting BibTeX database to the HTML file with help of JabRef can be found in [jabref][jabref].
+* Manual on exporting BibTeX database to the HTML file with help of JabRef can be found in [jabref](jabref).
 
 ### Author
 
