@@ -1,6 +1,6 @@
 ### About
 
-Exporting BibTex database to the HTML filw with help of JabRef.
+Exporting BibTex database to the HTML file with help of JabRef.
 
 ### How to use
 
