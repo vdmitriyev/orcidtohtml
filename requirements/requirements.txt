@@ -1,0 +1,10 @@
+requests
+bibtexparser==1.2.0
+pylatexenc
+fuzzywuzzy
+
+Flask
+Flask-WTF
+Flask-Bootstrap
+
+python-dotenv

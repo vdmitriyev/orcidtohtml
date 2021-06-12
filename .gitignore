@@ -1,0 +1,29 @@
+# files
+orcidids-list.json
+TODOs.txt
+settings.py
+credentials.py
+
+# environment files
+.env
+.env-dev
+.env-prod
+.env-test
+
+# extensions
+*.csv
+*.html
+*.json
+
+# folders
+__pycache__/*
+**/__pycache__
+temp/*
+*.ipynb_checkpoints
+.venv/*
+.logs/*
+.vscode/*
+.downloads/*
+data/*
+
+
