@@ -1,0 +1,25 @@
+# files
+orcidids-list.json
+
+# environment files
+.env
+.env-dev
+.env-prod
+.env-test
+
+# extensions
+*.csv
+*.html
+*.json
+
+# folders
+__pycache__/*
+**/__pycache__
+temp/*
+.venv/*
+.logs/*
+.vscode/*
+.downloads/*
+data/*
+
+
