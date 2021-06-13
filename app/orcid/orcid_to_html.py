@@ -5,6 +5,8 @@ import requests
 import traceback
 from .bibtex_parser import BibtexEntry, parse_bibtex
 
+from werkzeug.utils import secure_filename
+
 def change_logging_level():
     ''' Changes logging level of some libraries not to make output too verbose'''
     import logging.config
@@ -12,8 +14,14 @@ def change_logging_level():
     logging.getLogger("bibtexparser.bparser").setLevel(logging.WARNING)
     logging.getLogger("bibtexparser.customization").setLevel(logging.WARNING)
 
-def process_orcid(orcid_id = None, name = None, test_mode = False):
-    ''' Process items of a given orcid_id'''
+def process_orcid(orcid_id = None, name = None, test_mode = False, keep_files = False):
+    ''' Process items of a given orcid_id
+
+        orcid_id    -> ORCID number
+        name        -> name to highlight / use as folder
+        test_mode   -> only one run + keep some results as files
+        keep_files  -> keep some results as files
+    '''
 
     change_logging_level()
 
@@ -21,10 +29,13 @@ def process_orcid(orcid_id = None, name = None, test_mode = False):
         print ('orcid_id cannot be None')
         return
 
+    if test_mode:
+        keep_files = True
+
     if not os.path.exists('data'):
         os.makedirs('data')
 
-    base_dir = os.path.join('data', name)
+    base_dir = os.path.join('data', secure_filename(name))
     if not os.path.exists(base_dir):
         os.makedirs(base_dir)
 
@@ -32,8 +43,9 @@ def process_orcid(orcid_id = None, name = None, test_mode = False):
 
     results = resp.json()
 
-    with codecs.open(os.path.join(base_dir, 'orcid-output.json'), 'w', encoding='utf-8') as f:
-        json.dump(results, f, indent=4, ensure_ascii=False)
+    if keep_files:
+        with codecs.open(os.path.join(base_dir, 'orcid-output.json'), 'w', encoding='utf-8') as f:
+            json.dump(results, f, indent=4, ensure_ascii=False)
 
     entries, errors = [], []
     for i, item in enumerate(results['group']):
@@ -45,8 +57,10 @@ def process_orcid(orcid_id = None, name = None, test_mode = False):
             # get specific work item / publication
             resp = requests.get(f"http://pub.orcid.org/{path_url}", headers={'Accept':'application/orcid+json'})
             results = resp.json()
-            with codecs.open(os.path.join(base_dir, f'{i}_output.json'), 'w', encoding='utf-8') as f:
-                json.dump(results, f, indent=4, ensure_ascii=False)
+
+            if keep_files:
+                with codecs.open(os.path.join(base_dir, f'{i}_output.json'), 'w', encoding='utf-8') as f:
+                    json.dump(results, f, indent=4, ensure_ascii=False)
 
             citation = results['citation']
             if citation is not None:
@@ -58,8 +72,9 @@ def process_orcid(orcid_id = None, name = None, test_mode = False):
                         bibtex_output = parse_bibtex(os.path.join(base_dir, f'{i}_output.bib'))
                         if bibtex_output is not None:
                             entries.append(bibtex_output)
-                            with codecs.open(os.path.join(base_dir, f'{i}_output.html'), 'w', encoding='utf-8') as f:
-                                f.write(bibtex_output.to_html(names_highlight = [name], short_name = False))
+                            if keep_files:
+                                with codecs.open(os.path.join(base_dir, f'{i}_output.html'), 'w', encoding='utf-8') as f:
+                                    f.write(bibtex_output.to_html(names_highlight = [name], short_name = False))
                         else:
                             is_error = True
 

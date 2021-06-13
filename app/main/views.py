@@ -1,8 +1,6 @@
 from flask import render_template, redirect, url_for, abort, flash, request,\
                   current_app, make_response, escape, Markup, jsonify, send_from_directory, send_file
 
-from werkzeug.utils import secure_filename
-
 from . import main
 from .forms import OrcidForm
 
@@ -34,7 +32,7 @@ def orcid2html():
             logging.getLogger("bibtexparser.customization").setLevel(logging.WARNING)
 
             entires, errors = process_orcid(orcid_id = form.orcidID.data, 
-                                            name = secure_filename(form.name.data),
+                                            name = form.name.data,
                                             test_mode = False)
             from operator import attrgetter
             entires.sort(key = attrgetter('year'), reverse = True)
