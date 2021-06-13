@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link href="static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <script src="static/js/jquery-3.4.1.min.js"></script>
+        <script src="static/js/bootstrap.min.js"></script>
+		
+		<link href="static/fontawesome/css/all.css" rel="stylesheet" media="screen">
+		
+        <!-- Custom styles for this template -->
+        <link href="static/css/starter-template.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OrcidToHTML</title>
+    </head>
+    
+    <body>    
+    
+		<nav class="navbar navbar-expand-md navbar-light fixed-top" style="background-color:#94c11c; font-size:13pt;">
+		
+		  <a class="navbar-brand" href="#"></a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2" id="navbarMainLeft">
+			<ul class="navbar-nav mr-auto">
+			 <li class="nav-item">
+				<a class="nav-link" href="index">Home</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="orcid2html">Orcid2HTML</a>
+			  </li>
+			  <li class="nav-item">
+				<a class="nav-link" href="bibtex2html">BibTeX2HTML</a>
+			  </li>
+			</ul>
+		  </div>
+		  
+		  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="navbarMainRight">
+			<ul class="navbar-nav ml-auto">
+				<li class="nav-item">
+					<a class="nav-link" href="about">About</a>
+				</li>		
+			</ul>
+		   </div>
+		   
+		</nav>
+		
+		<main role="main" class="container">
+			{% block content %}
+			{% endblock %}
+		</main>
+		
+    </body>
+	{% block script %}
+	{% endblock %}
+</html>

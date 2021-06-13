@@ -3,6 +3,7 @@ orcidids-list.json
 TODOs.txt
 settings.py
 credentials.py
+README.html
 
 # environment files
 .env
@@ -12,7 +13,6 @@ credentials.py
 
 # extensions
 *.csv
-*.html
 *.json
 *.db
 
