@@ -59,10 +59,14 @@ def orcid2html():
     if form.orcidID.data is None and orcid_id is not None:
         form.orcidID.data = orcid_id
 
+    bibtex_as_html_preview = None
+    if bibtex_as_html is not None:
+        bibtex_as_html_preview = Markup(bibtex_as_html)
+
     resp = make_response(render_template('orcid2html.html', form=form, 
                                                             message = message, 
                                                             bibtexAsHTML = bibtex_as_html,
-                                                            bibtexAsHTMLPreview = Markup(bibtex_as_html)
+                                                            bibtexAsHTMLPreview = bibtex_as_html_preview
                                         ))
     if form.name.data is not None:
         resp.set_cookie('name', form.name.data)
