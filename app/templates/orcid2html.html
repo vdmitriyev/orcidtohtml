@@ -5,29 +5,29 @@
 
 		<div class="card text-center">
           <div class="card-body">
-            <h5 class="card-title">Orcid to HTML</h5>
-			<p class="card-text">Provide <span class="badge badge-info">full name</span> and <span class="badge badge-info">ORCID</span> (special ID) to generate HTML, which is based on BibTeX-ex from ORCID</p>
+            <h5 class="card-title">ORCID to HTML</h5>
+			<p class="card-text">Provide <span class="badge badge-info">full name</span> and <span class="badge badge-info">ORCID</span> (special ID) to generate HTML, which should be based on BibTeX-ex from ORCID</p>
           </div>
         </div>
 		
-			<div class="container text-success d-none pt-3" id="submissionAck" name="submissionAck">
-				<div class="row row-cols-2">
-					<div class="col-4">					
-						<div class="spinner-border text-warning float-right mt-3" role="status">
-							<span class="sr-only">Loading...</span>
-						</div>					
+		<div class="container text-success d-none pt-3" id="submissionAck" name="submissionAck">
+			<div class="row row-cols-2">
+				<div class="col-4">					
+					<div class="spinner-border text-warning float-right mt-3" role="status">
+						<span class="sr-only">Loading...</span>
+					</div>					
+				</div>
+				<div class="col-8">
+					<div class="text-left pb-2">
+						The request <b>has been already sent</b> to the server </br> 
+						Just be patient, the process may take a while </br> 
+						You will be <i>automatically redirected</i></br>
 					</div>
-					<div class="col-8">
-						<div class="text-left pb-2">
-							The request <b>has been already sent</b> to the server </br> 
-							Just be patient, the process may take a while </br> 
-							You will be <i>automatically redirected</i></br>
-						</div>
-					</div>
-				</div>			
-			</div>
+				</div>
+			</div>			
+		</div>
 			
-		<form method="post" role="form" id="orcid2htmlForm">
+		<form method="post" role="form" id="orcid2htmlForm" class="mt-2">
 		  {{ form.hidden_tag() }}
 		  {{ wtf.form_errors(form, hiddens="only") }}
 			
