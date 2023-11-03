@@ -1,6 +1,6 @@
 ### About
 
-Webapp to convert BibTeX (ORCID based) into HTML
+A webapp to convert BibTeX (from the ORCID) into a HTML.
 
 ### Install using Docker
 
@@ -13,7 +13,9 @@ Webapp to convert BibTeX (ORCID based) into HTML
 	+  ```docker run -d -p "127.0.0.1:5252:5252" --name orcidtohtml --restart unless-stopped orcidtohtml```
 * Should run on ```localhost:5252```
 
-### Nging Config (production deployment)
+### Production Deployment
+
+Use the following nginx config to deploy the Docker Container in production
 
 ```
 location /orcidtohtml/ {
