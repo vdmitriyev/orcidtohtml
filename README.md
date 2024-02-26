@@ -4,14 +4,26 @@ A webapp to convert BibTeX (from the ORCID) into a HTML.
 
 ### Install using Docker
 
-* Install Docker
-* ```bash git clone https://github.com/vdmitriyev/orcidtohtml.git```
-* ```cd orcidtohtml```
+* Clone repo
+	```bash 
+	git clone https://github.com/vdmitriyev/orcidtohtml.git
+	```
+* Go to folder
+	```
+	cd orcidtohtml
+	```
 * Build Docker image
-	+ ```docker build -t orcidtohtml:latest .```
+	```
+	docker build -t orcidtohtml:latest .
+	```
 * Run created image
-	+  ```docker run -d -p "127.0.0.1:5252:5252" --name orcidtohtml --restart unless-stopped orcidtohtml```
-* Should run on ```localhost:5252```
+	```
+	docker run -d -p "127.0.0.1:5252:5252" --name orcidtohtml --restart unless-stopped orcidtohtml
+	```
+* Should run on 
+	```
+	localhost:5252
+	```
 
 ### Production Deployment
 
@@ -31,6 +43,6 @@ location /orcidtohtml/ {
 
 * Manual on exporting BibTeX database to the HTML file with help of JabRef can be found in [jabref](jabref).
 
-### Author
+### License
 
-* Viktor Dmitriyev
+MIT

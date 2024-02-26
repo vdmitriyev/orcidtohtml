@@ -4,6 +4,7 @@ TODOs.txt
 settings.py
 credentials.py
 README.html
+.flask_secret
 
 # environment files
 .env

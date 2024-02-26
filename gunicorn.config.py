@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 
 bind = '0.0.0.0:5252'
-workers = 4
+workers = 2
 accesslog = '-'
 timeout = 120
 loglevel = 'debug'

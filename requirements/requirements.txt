@@ -1,10 +1,10 @@
-requests
+requests==2.31.0
 bibtexparser==1.2.0
-pylatexenc
-fuzzywuzzy
+pylatexenc==2.10
+fuzzywuzzy==0.18.0
 
-Flask
-Flask-WTF
-Flask-Bootstrap
+Flask==2.3.3
+Flask-WTF==1.2.1
+Flask-Bootstrap==3.3.7.1
 
-python-dotenv
+python-dotenv==1.0.1
