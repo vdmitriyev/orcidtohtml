@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 
-bind = '0.0.0.0:5252'
+bind = "0.0.0.0:5252"
 workers = 2
-accesslog = '-'
+accesslog = "-"
 timeout = 120
-loglevel = 'debug'
+loglevel = "debug"
 capture_output = True
-accesslog = 'gunicorn.log'
-errorlog = 'gunicorn.error.log'
+accesslog = "gunicorn.log"
+errorlog = "gunicorn.error.log"
 enable_stdio_inheritance = True

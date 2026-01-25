@@ -1,6 +1,6 @@
 @echo off
 cd ..
-SET PATH=C:\Compilers\Python311\Scripts\;C:\Compilers\Python311\;%PATH%
+SET PATH=C:\Compilers\Python312\Scripts\;C:\Compilers\Python312\;%PATH%
 set PYTHONUTF8=1
 call .venv\Scripts\activate.bat
 cmd

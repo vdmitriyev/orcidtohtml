@@ -20,7 +20,7 @@ A webapp to convert BibTeX (from the ORCID) into a HTML.
 	```
 	docker run -d -p "127.0.0.1:5252:5252" --name orcidtohtml --restart unless-stopped orcidtohtml
 	```
-* Should run on 
+* Ther service should be available on 
 	```
 	localhost:5252
 	```
