@@ -1,10 +1,10 @@
 from flask import (
-    Markup,
     current_app,
     make_response,
     render_template,
     request,
 )
+from markupsafe import Markup
 
 from . import main
 from .forms import OrcidForm

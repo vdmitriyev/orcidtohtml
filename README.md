@@ -11,18 +11,19 @@ A webapp to convert BibTeX (from the ORCID) into a HTML.
 * Go to folder
 	```
 	cd orcidtohtml
-	```
+	```	
 * Build Docker image
 	```
+	task build
 	docker build -t orcidtohtml:latest .
 	```
-* Run created image
+* Run container
 	```
-	docker run -d -p "127.0.0.1:5252:5252" --name orcidtohtml --restart unless-stopped orcidtohtml
+	task up	
 	```
-* Ther service should be available on 
+* Ther service should be available on:
 	```
-	localhost:5252
+	http://localhost:5252
 	```
 
 ### Production Deployment

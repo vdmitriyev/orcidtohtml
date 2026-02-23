@@ -1,4 +1,6 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
+
+WORKDIR /app
 
 # create the app user
 RUN addgroup --system app && adduser --system --group app
@@ -21,4 +23,5 @@ RUN uv pip install --system --no-cache -r requirements/requirements-prod.txt
 COPY app app
 
 EXPOSE 5252
+
 CMD ["gunicorn", "--config", "gunicorn.config.py", "run:app"]

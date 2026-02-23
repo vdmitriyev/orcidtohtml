@@ -1,0 +1,55 @@
+version: '3'
+
+vars:
+  CONTAINER_NAME: orcidtohtml
+  IMAGE_NAME: orcidtohtml:latest
+  
+tasks:  
+
+  build:
+    desc: Build the Docker image
+    cmds:
+      - docker compose build
+  
+  rebuild:
+    desc: Clean and rebuild everything
+    cmds:
+      - task: clean
+      - task: build
+      - task: up
+
+  up:
+    desc: Start the container
+    cmds:
+      - docker compose up -d   
+
+  down:
+    desc: Stop and remove the container
+    cmds:
+      - docker compose down
+
+  restart:
+    desc: Restart the container
+    cmds:
+      - task: down
+
+  shell:
+    desc: Open a shell in the container
+    cmds:    
+      - docker compose exec {{.CONTAINER_NAME}} /bin/bash
+
+  logs:
+    desc: View container logs
+    cmds:
+      - docker compose logs -f {{.CONTAINER_NAME}}
+
+  clean:
+    desc: Remove container, image, and volumes
+    cmds:
+      - docker compose down -v
+      - docker rmi {{.IMAGE_NAME}} || true
+
+  exec:
+    desc: Execute a command in the container (usage - task exec -- <command>)
+    cmds:
+      - docker compose exec {{.CONTAINER_NAME}} {{.CLI_ARGS}}

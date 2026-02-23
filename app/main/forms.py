@@ -1,14 +1,10 @@
-from flask import Markup
 from flask_wtf import FlaskForm
+from markupsafe import Markup
 from wtforms import (
-    BooleanField,
-    PasswordField,
-    SelectField,
     StringField,
     SubmitField,
-    TextAreaField,
 )
-from wtforms.validators import DataRequired, Email, Length, Regexp
+from wtforms.validators import Length, Regexp
 
 
 class OrcidForm(FlaskForm):

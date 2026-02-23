@@ -1,0 +1,6 @@
+.git/*
+.logs/*
+.venv/*
+.vscode/*   
+__pycache__/*
+jabref/*
