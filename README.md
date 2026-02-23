@@ -4,6 +4,8 @@ A webapp to convert BibTeX (from the ORCID) into a HTML.
 
 ### Install using Docker
 
+> Prerequisite: [taskfile](https://taskfile.dev/) should be installed. Otherwise just take commands from the `yaml` files.
+
 * Clone repo
 	```bash 
 	git clone https://github.com/vdmitriyev/orcidtohtml.git
@@ -15,13 +17,12 @@ A webapp to convert BibTeX (from the ORCID) into a HTML.
 * Build Docker image
 	```
 	task build
-	docker build -t orcidtohtml:latest .
 	```
 * Run container
 	```
 	task up	
 	```
-* Ther service should be available on:
+* The service should be available on:
 	```
 	http://localhost:5252
 	```
