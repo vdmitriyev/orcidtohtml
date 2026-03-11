@@ -1,12 +1,10 @@
-import codecs
 import copy
 import traceback
 from dataclasses import dataclass
 
 import bibtexparser
-from bibtexparser.bibdatabase import BibDatabase
 from bibtexparser.bparser import BibTexParser
-from bibtexparser.bwriter import BibTexWriter
+from bibtexparser.bwriter import BibTexWriter, SortingStrategy
 from bibtexparser.customization import *
 from fuzzywuzzy import fuzz
 from jinja2 import Template
@@ -21,7 +19,8 @@ class BibtexEntry:
     year: int
     doi: str
     url: str
-    bibtex: str
+    bibtex_custom: str
+    bibtex_original: str
 
     def random_string(self, size=30):
         import random
@@ -55,7 +54,7 @@ class BibtexEntry:
         {% endif %}
         <!------ begin ------->
             <p>
-            {{authors}} <b><i>{{title}}</i></b>, {{year}}, {{journal}}, {{booktitle}}
+            {{authors}} <b><i>"{{title}}"</i></b>, {{year}}, {{journal}}, {{booktitle}}
             &nbsp;
             <a href="{{doi}}">DOI</a>&nbsp;
             <a href="{{url}}">URL</a>&nbsp;
@@ -116,7 +115,7 @@ class BibtexEntry:
             year=self.year,
             doi=self.doi,
             url=self.url,
-            bibtex=self.bibtex,
+            bibtex_custom=self.bibtex_custom,
             jsCode=js_code,
         )
 
@@ -139,6 +138,7 @@ def customizations(record):
     record = link(record)
     record = page_double_hyphen(record)
     record = doi(record)
+
     return record
 
 
@@ -168,16 +168,23 @@ def bibtex_to_fullname(name):
     full_name = name
     if len(tokens) == 2:
         full_name = tokens[1].strip() + " " + tokens[0].strip()
+
     return full_name
 
 
-def bibtex_to_obj(bibtex_entry):
-    """Convers bibtex obj of the parser into own bibtex object (BibtexEntry)"""
+def bibtex_to_obj(bibtex_entry, bibtex_original) -> BibtexEntry:
+    """
+        Converts bibtex obj of the parser into own bibtex object.
+
+    Args:
+        bibtex_entry (dict): input bibtex values
+
+    Returns:
+        BibtexEntry: object
+    """
 
     authors = list()
-    # authors.append(bibtex_to_fullname(clean_text(LatexNodes2Text().latex_to_text(bibtex_entry['author']))))
     for author in bibtex_entry["author"]:
-        # authors.append(bibtex_to_fullname(clean_text(author)))
         authors.append(bibtex_to_fullname(clean_text(LatexNodes2Text().latex_to_text(author))))
 
     title = bibtex_entry["title"]
@@ -189,11 +196,10 @@ def bibtex_to_obj(bibtex_entry):
 
     publishedIn = ""
     if "journal" in bibtex_entry:
-        publishedIn = bibtex_entry["journal"]["name"]
-        # publishedIn = bibtex_entry['journal']
+        publishedIn = LatexNodes2Text().latex_to_text(bibtex_entry["journal"]["name"])
 
     if "booktitle" in bibtex_entry:
-        publishedIn = bibtex_entry["booktitle"]
+        publishedIn = LatexNodes2Text().latex_to_text(bibtex_entry["booktitle"])
 
     doi = ""
     if "doi" in bibtex_entry:
@@ -208,18 +214,26 @@ def bibtex_to_obj(bibtex_entry):
             url = bibtex_entry["link"][0]["url"]
 
     new_entry = copy.deepcopy(bibtex_entry)
-    bibtex_raw = bibtex_from_entry(new_entry)
+    bibtex_custom = bibtex_from_entry(new_entry)
 
     bibtex_entry = BibtexEntry(
-        authors=authors, title=title, year=year, publishedIn=publishedIn, doi=doi, url=url, bibtex=bibtex_raw
+        authors=authors,
+        title=title,
+        year=year,
+        publishedIn=publishedIn,
+        doi=doi,
+        url=url,
+        bibtex_custom=bibtex_custom,
+        bibtex_original=bibtex_original,
     )
 
     return bibtex_entry
 
 
-def bibtex_from_entry(entry):
-    """A hack that lets to avoid exceptoin that happends when exporting back parsed entry into bibtex
-    The problems happends because of the new formats of entry, because bwriter understand only "flatt" (old) one
+def bibtex_from_entry(entry: dict):
+    """
+    A hack that lets to avoid exception that happens when exporting back parsed entry into bibtex.
+    The problems happens, because of the new formats of entry, because `bwriter` understand only "flatt" (old) one.
     """
 
     writer = BibTexWriter()
@@ -245,24 +259,53 @@ def bibtex_from_entry(entry):
     return bibtex_raw
 
 
-def parse_bibtex(bibtex_fname):
+def parse_bibtex(bibtex_fname: str, bibtex_original: str):
     """Parses given bibtex file"""
 
     try:
 
-        with codecs.open(bibtex_fname, "r", encoding="utf8") as bibtex_file:
+        with open(bibtex_fname, "r", encoding="utf8") as bibtex_file:
             parser = BibTexParser()
             parser.customization = customizations
             bib_database = bibtexparser.load(bibtex_file, parser=parser)
             bibtex_entry = None
             if len(bib_database.entries) > 0:
-                bibtex_entry = bibtex_to_obj(bib_database.entries[0])
+                bibtex_entry = bibtex_to_obj(bib_database.entries[0], bibtex_original)
+
             return bibtex_entry
+
     except Exception:
         print(traceback.format_exc())
 
     return None
 
 
-if __name__ == "__main__":
-    pass
+def format_bibtex_string(bib_string: str) -> str:
+    """
+    Parses a BibTeX string and formats it in memory.
+    Sorts fields specifically by: title, author, year, etc.
+    """
+
+    parser = BibTexParser()
+    bib_database = bibtexparser.loads(bib_string, parser=parser)
+    writer = BibTexWriter()
+    writer.indent = "  "
+    writer.display_order = [
+        "title",
+        "author",
+        "year",
+        "booktitle",
+        "publisher",
+        "editor",
+        "journal",
+        "series",
+        "address",
+        "volume",
+        "number",
+        "pages",
+        "url",
+        "doi",
+    ]
+    writer.display_order_sorting = SortingStrategy.PRESERVE
+
+    return writer.write(bib_database)

@@ -1,12 +1,31 @@
+import argparse
 import codecs
 import json
 import os
 import traceback
+import uuid
+from datetime import datetime, timezone
 
 import requests
 from werkzeug.utils import secure_filename
 
-from .bibtex_parser import BibtexEntry, parse_bibtex
+from .bibtex_parser import parse_bibtex
+
+
+def generate_job_id() -> str:
+    """
+    Generates a string representing the current datetime in 'YYYYMMDD-HHMM' format
+    and appends a UUID to it.
+
+    Returns:
+      str: A string in the format 'YYYYMMDD-HHMM-UUID'.
+    """
+
+    now_utc = datetime.now(timezone.utc)
+    formatted_datetime = now_utc.strftime("%Y%m%d-%H%M")
+    unique_id = str(uuid.uuid4())[:8]
+
+    return f"{formatted_datetime}-{unique_id}"
 
 
 def change_logging_level():
@@ -18,7 +37,7 @@ def change_logging_level():
     logging.getLogger("bibtexparser.customization").setLevel(logging.WARNING)
 
 
-def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
+def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False, job_id=None):
     """Process items of a given orcid_id
 
     orcid_id    -> ORCID number
@@ -28,6 +47,8 @@ def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
     """
 
     change_logging_level()
+    if job_id is None:
+        job_id = generate_job_id()
 
     if orcid_id is None:
         print("orcid_id cannot be None")
@@ -48,7 +69,8 @@ def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
     results = resp.json()
 
     if keep_files:
-        with codecs.open(os.path.join(base_dir, "orcid-output.json"), "w", encoding="utf-8") as f:
+        orcid_output_as_json = os.path.join(base_dir, f"{job_id}_orcid-output.json")
+        with open(orcid_output_as_json, "w", encoding="utf-8") as f:
             json.dump(results, f, indent=4, ensure_ascii=False)
 
     entries, errors = [], []
@@ -63,23 +85,28 @@ def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
             results = resp.json()
 
             if keep_files:
-                with codecs.open(os.path.join(base_dir, f"{i}_output.json"), "w", encoding="utf-8") as f:
+                output_as_json_file = os.path.join(base_dir, f"{job_id}_{i}_output.json")
+                with open(output_as_json_file, "w", encoding="utf-8") as f:
                     json.dump(results, f, indent=4, ensure_ascii=False)
 
             citation = results["citation"]
             if citation is not None:
                 if "citation-type" in citation:
                     if citation["citation-type"].lower() == "bibtex":
-                        with codecs.open(os.path.join(base_dir, f"{i}_output.bib"), "w", encoding="utf-8") as f:
-                            f.write(citation["citation-value"])
 
-                        bibtex_output = parse_bibtex(os.path.join(base_dir, f"{i}_output.bib"))
+                        bibtex_original = citation["citation-value"]
+                        bibtex_path = os.path.join(base_dir, f"{job_id}_{i}_output.bib")
+                        bibtex_as_html_path = os.path.join(base_dir, f"{job_id}_{i}_output.html")
+
+                        with open(bibtex_path, "w", encoding="utf-8") as f:
+                            f.write(bibtex_original)
+
+                        bibtex_output = parse_bibtex(bibtex_path, bibtex_original)
+
                         if bibtex_output is not None:
                             entries.append(bibtex_output)
                             if keep_files:
-                                with codecs.open(
-                                    os.path.join(base_dir, f"{i}_output.html"), "w", encoding="utf-8"
-                                ) as f:
+                                with open(bibtex_as_html_path, "w", encoding="utf-8") as f:
                                     f.write(bibtex_output.to_html(names_highlight=[name], short_name=False))
                         else:
                             is_error = True
@@ -91,8 +118,7 @@ def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
                 try:
                     pub_title = item["work-summary"][0]["title"]["title"]["value"]
                     message = f'Empty or wrong BibTeX was found: "{pub_title}"'
-                    print(message)
-                    print(f"path_url: {path_url}")
+                    print(f"message: {message};\npath_url: {path_url}")
                     errors.append({"message": message, "path_url": path_url})
                 except Exception as ex:
                     print(traceback.format_exc())
@@ -100,21 +126,33 @@ def process_orcid(orcid_id=None, name=None, test_mode=False, keep_files=False):
 
             if test_mode:
                 break
+
         except Exception as ex:
             print(traceback.format_exc())
             errors.append({"message": f"Exception: {ex}", "path_url": None})
+
     return entries, errors
 
 
-def main():
-    """ """
+def parse_via_cli(fname: str = None, orcid: str = None):
+    """Parses ORCID IDs from a file or a single provided ID."""
 
-    fname_orcid_ids = "orcid_ids_list.json"
+    fname_orcid_ids = fname if fname else "orcid_ids_list.json"
     orcid_ids = {}
-    with codecs.open(fname_orcid_ids, "r", encoding="utf8") as f_json:
-        orcid_ids = json.load(f_json)
 
-    print(orcid_ids)
+    if orcid:
+        print(f"Processing single ORCID provided via CLI: {orcid}")
+        process_orcid(orcid_id=orcid, name="single user")
+        return
+
+    try:
+        with open(fname_orcid_ids, "r", encoding="utf8") as f_json:
+            orcid_ids = json.load(f_json)
+    except FileNotFoundError:
+        print(f"Error: The file '{fname_orcid_ids}' was not found.")
+        return
+
+    print(f"List of orcid IDs: {orcid_ids}")
 
     for key in orcid_ids:
         print(f"Processing orcid of the author: {key}")
@@ -122,4 +160,10 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description="Process ORCID IDs from a file or direct input.")
+
+    parser.add_argument("--file", type=str, help="Path to the JSON file containing ORCID IDs")
+    parser.add_argument("--orcid", type=str, help="A single ORCID ID to process directly")
+
+    args = parser.parse_args()
+    parse_via_cli(fname=args.file, orcid=args.orcid)

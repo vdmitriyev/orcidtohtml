@@ -28,29 +28,28 @@ def orcid2html():
     name = request.cookies.get("name", None)
     orcid_id = request.cookies.get("orcidID", None)
     message = None
-    bibtex_as_html = None
+    bibtex_as_html, bibtex_as_bibtex = None, None
     form = OrcidForm()
     if form.validate_on_submit():
 
+        from ..orcid.bibtex_parser import format_bibtex_string
         from ..orcid.orcid_to_html import process_orcid
 
         current_app.logger.info(f"Process orcid id: {form.orcidID.data}")
         try:
-            import logging.config
-
-            logging.getLogger("urllib3.connectionpool").setLevel(logging.WARNING)
-            logging.getLogger("bibtexparser.customization").setLevel(logging.WARNING)
 
             entires, errors = process_orcid(orcid_id=form.orcidID.data, name=form.name.data, test_mode=False)
             from operator import attrgetter
 
             entires.sort(key=attrgetter("year"), reverse=True)
-            bibtex_as_html = ""
+            bibtex_as_html, bibtex_as_bibtex = "", ""
             for index, entry in enumerate(entires):
                 if index == 0:
                     bibtex_as_html += entry.to_html(names_highlight=[name], short_name=False, include_js=True)
                 else:
                     bibtex_as_html += entry.to_html(names_highlight=[name], short_name=False, include_js=False)
+
+                bibtex_as_bibtex += format_bibtex_string(entry.bibtex_original) + "\n\n"
 
             if len(errors) > 0:
                 message = ""
@@ -79,6 +78,7 @@ def orcid2html():
             form=form,
             message=message,
             bibtexAsHTML=bibtex_as_html,
+            bibtexAsBIBTEX=bibtex_as_bibtex,
             bibtexAsHTMLPreview=bibtex_as_html_preview,
         )
     )

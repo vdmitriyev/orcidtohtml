@@ -1,6 +1,7 @@
 .git/*
 .logs/*
 .venv/*
+data/*
 .vscode/*   
 __pycache__/*
 jabref/*

@@ -60,10 +60,15 @@
 		{% if bibtexAsHTML is defined %}
 			{% if bibtexAsHTML is not none %}
 			
-			<div class="form-group p-0 mt-2">
-				<label for="bibtexAsHTML">BibTeX as HTML (code)</label>
-				<textarea class="form-control" id="bibtexAsHTML" rows="15" style="font-size:10pt;">{{bibtexAsHTML}}</textarea>
-			</div>
+            <div class="form-group p-0 mt-2 position-relative">
+                <label for="bibtexAsHTML">BibTeX as HTML (code)</label>
+                <textarea class="form-control" id="bibtexAsHTML" rows="15" style="font-size:10pt;">{{bibtexAsHTML}}</textarea>
+                
+                <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="copyBibtexAsHTMLBtn" onclick="copyBibtexAsHTML()">
+                    <i class="fas fa-copy"></i> Copy BibTeX as HTML
+                </button>
+            </div>
+          
 			
 			{% endif %}
 		{% endif %}
@@ -71,21 +76,53 @@
 		{% if bibtexAsHTMLPreview is defined %}
 			{% if bibtexAsHTMLPreview is not none %}
 		
-			<ul class="list-group mt-2 mb-1">					
-				<li class="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary" data-toggle="collapse" href="#collapsePreviewBibTeXToHTML" role="button" aria-expanded="false" aria-controls="collapsePreviewBibTeXToHTML">
-				Preview - BibTeX as HTML
-				<button type="button" class="btn btn-outline-secondary">				  
-					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-arrow-bar-down" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-						<path fill-rule="evenodd" d="M1 3.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5zM8 6a.5.5 0 0 1 .5.5v5.793l2.146-2.147a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 .708-.708L7.5 12.293V6.5A.5.5 0 0 1 8 6z"/>
-					</svg>
-				</button>
-				</li>
-				
-				<div class="card collapse p-2 m-0" id="collapsePreviewBibTeXToHTML">
-					{{bibtexAsHTMLPreview}}			
-				</div>
-			</ul>
+            <ul class="list-group mt-2 mb-1">					
+                <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary" 
+                    data-toggle="collapse" 
+                    href="#collapsePreviewBibTeXToHTML" 
+                    role="button" 
+                    aria-expanded="false" 
+                    aria-controls="collapsePreviewBibTeXToHTML">                    
+                    Preview - BibTeX as HTML                    
+                    <button type="button" class="btn btn-outline-secondary">
+                        <i class="fas fa-angles-down"></i>
+                    </button>
+                </li>
+                
+                <div class="card collapse p-2 m-0" id="collapsePreviewBibTeXToHTML">
+                    {{bibtexAsHTMLPreview}}			
+                </div>
+            </ul>
 			
+			{% endif %}
+		{% endif %}
+        
+        {% if bibtexAsBIBTEX is defined %}
+			{% if bibtexAsBIBTEX is not none %}
+            
+            <ul class="list-group mt-2 mb-1">					
+                <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-secondary" 
+                    data-toggle="collapse" 
+                    href="#collapsePreviewBibTeXToBibTeX" 
+                    role="button" 
+                    aria-expanded="false" 
+                    aria-controls="collapsePreviewBibTeXToBibTeX">  
+                    BibTeX (original)
+                    <button type="button" class="btn btn-outline-secondary">
+                        <i class="fas fa-angles-down"></i>
+                    </button>
+                </li>
+                <div class="card collapse p-2 m-0" id="collapsePreviewBibTeXToBibTeX">
+                    <div class="form-group p-0 mt-2 position-relative">
+                        <label for="bibtexAsBIBTEX">BibTeX</label>
+                        <textarea class="form-control" id="bibtexAsBIBTEX" rows="15" style="font-size:10pt;">{{bibtexAsBIBTEX}}</textarea>
+                        
+                        <button type="button" class="btn btn-sm btn-outline-secondary mt-2" id="copyBibtexAsBIBTEXBtn" onclick="copyBibtexAsBIBTEX()">
+                            <i class="fas fa-copy"></i> Copy BibTeX
+                        </button>
+                    </div>
+                 </div>
+			 </ul>
 			{% endif %}
 		{% endif %}
 		
@@ -106,5 +143,48 @@
 			$('#submissionAck').removeClass('d-none');
 			console.log('Prevent submit for a while.');
 		});
+        
+        function copyBibtexAsHTML() {
+            // Select the textarea element
+            const textArea = document.getElementById("bibtexAsHTML");
+            const btn = document.getElementById("copyBibtexAsHTMLBtn");
+            
+            // Select the text and copy it
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(textArea.value);
+
+            // Optional: Visual feedback
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.classList.replace('btn-outline-secondary', 'btn-success');
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.replace('btn-success', 'btn-outline-secondary');
+            }, 2000);
+        }
+        
+         function copyBibtexAsBIBTEX() {
+            // Select the textarea element
+            const textArea = document.getElementById("bibtexAsBIBTEX");
+            const btn = document.getElementById("copyBibtexAsBIBTEXBtn");
+            
+            // Select the text and copy it
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // For mobile devices
+            navigator.clipboard.writeText(textArea.value);
+
+            // Optional: Visual feedback
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+            btn.classList.replace('btn-outline-secondary', 'btn-success');
+
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.replace('btn-success', 'btn-outline-secondary');
+           }, 3000);
+        }
+
 	</script>
 {% endblock %}

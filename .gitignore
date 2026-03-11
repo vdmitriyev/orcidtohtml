@@ -28,4 +28,4 @@ temp/*
 .downloads/*
 data/*
 testsmanual/*
-
+app/orcid/data/*

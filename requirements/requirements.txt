@@ -1,5 +1,5 @@
 requests==2.32.4
-bibtexparser==1.2.0
+bibtexparser==1.4.4
 pylatexenc==2.10
 fuzzywuzzy==0.18.0
 
@@ -8,3 +8,4 @@ Flask-WTF==1.2.1
 Flask-Bootstrap==3.3.7.1
 
 python-dotenv==1.0.1
+Levenshtein==0.27.3
