@@ -241,6 +241,7 @@ def bibtex_from_entry(entry):
             entry["link"] = ""
 
     bibtex_raw = writer._entry_to_bibtex(entry)
+
     return bibtex_raw
 
 
