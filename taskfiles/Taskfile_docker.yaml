@@ -3,7 +3,7 @@ version: '3'
 vars:
   CONTAINER_NAME: orcidtohtml
   IMAGE_NAME: orcidtohtml:latest
-  
+    
 tasks:  
 
   build:
@@ -53,3 +53,7 @@ tasks:
     desc: Execute a command in the container (usage - task exec -- <command>)
     cmds:
       - docker compose exec {{.CONTAINER_NAME}} {{.CLI_ARGS}}
+  scan:
+    desc: Scans docker images for known security issues
+    cmds: 
+      - docker scout cves {{.IMAGE_NAME}}

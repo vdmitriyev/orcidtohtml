@@ -1,7 +1,7 @@
 FROM python:3.13-slim
 
 # create the app user
-RUN addgroup --system app && adduser --system --group app
+RUN addgroup --system appuser && adduser --system --group appuser
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1
@@ -24,5 +24,9 @@ COPY run.py gunicorn.config.py config.py ./
 COPY app app
 
 EXPOSE 5252
+
+RUN chown -R appuser:appuser /app
+
+USER appuser
 
 CMD ["gunicorn", "--config", "gunicorn.config.py", "run:app"]
