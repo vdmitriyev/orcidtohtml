@@ -1,3 +1,22 @@
+# files
+orcidids-list.json
+TODOs.txt
+settings.py
+credentials.py
+README.html
+.flask_secret
+
+# environment files
+.env
+.env-dev
+.env-prod
+.env-test
+
+# extensions
+*.csv
+*.json
+*.db
+
 .git/*
 .logs/*
 .venv/*
@@ -5,3 +24,6 @@ data/*
 .vscode/*   
 __pycache__/*
 jabref/*
+testsmanual/*
+taskfiles/*
+app/orcid/data/*
