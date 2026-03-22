@@ -61,7 +61,7 @@ class BibtexEntry:
             <a href="#" onclick="toggle_visibility('{{publicationID}}');return false;">BibTeX</a>
             <div id="{{publicationID}}" style="display:none;">
               <pre>
-                {{bibtex}}
+                {{bibtex_original}}
               </pre>
             </div>
             </p>
@@ -115,7 +115,7 @@ class BibtexEntry:
             year=self.year,
             doi=self.doi,
             url=self.url,
-            bibtex_custom=self.bibtex_custom,
+            bibtex_original=self.bibtex_original,
             jsCode=js_code,
         )
 
