@@ -1,4 +1,4 @@
-requests==2.32.4
+requests==2.33.0
 bibtexparser==1.4.4
 pylatexenc==2.10
 fuzzywuzzy==0.18.0
